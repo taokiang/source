@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>购物车加减</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
+	<script type="text/javascript" src="js/zepto.js"></script>
+	<style  type="text/css">
+	body{margin:0;padding:0;}
+	a,a:hover{text-decoration:none;}
+	.left{float:left;}
+	.right{float:right;}
+	.page{max-width:750px;margin:0 auto;background:#fff;}
+	.num_box{margin:0 15px;border-top:1px solid #bfbfbf;border-bottom:1px solid #bfbfbf;padding:23px 0;color:#000;text-align:center;overflow:hidden;}
+	.num_box .chooseTxt{float:left;font-size:15px;line-height:30px;}
+	.num_box .chooseNum{float:right;zoom:1;overflow:hidden;line-height:30px;}
+	.num_box .chooseNum .suCount{float:left;display:block;width:30px;height:30px;line-height:30px;border:1px solid #bfbfbf;color:#bfbfbf;border-radius:2px;}
+	.num_box .chooseNum .iMobile{float:left;display:block;width:45px;height:30px;font-size:15px;line-height:30px;border:1px solid #bfbfbf;color:#bfbfbf;margin:0 8px;text-align:center;color:#000;padding:0;}
+	.num_box .add_btn{color:#e0002a;border:1px solid #e0002a;}
+	.bottom_nav{position:fixed;bottom:0;left:0;width:100%;height:55px;line-height:55px;border-top:1px solid #d8d8d8;background:#fff;overflow:hidden;z-index:999;}
+	.bottom_nav .pay_btn{display:block;width:32%;height:55px;background:#e83428;color:#fff;font-size:18px;text-align:center;}
+	</style>	
+</head>
+<body>
+	<div class="page">
+		<div class="num_box">
+			<span class="chooseTxt">选择套餐数量</span>
+			<div class="chooseNum">
+				<span id="min" class="suCount">－</span>
+				<input type="text" class="iMobile" id="pointValue" value="1" readonly="readonly" name="pointValue">
+				<span id="add" class="suCount add_btn">＋</span>
+			</div>
+		</div>
+		<div class="bottom_nav">
+			<div class="left ml15">
+				<span class="fs18 red">&yen;<em id="total"></em></span>
+			</div>
+			<a href="javascript:void(0);" id="goPay" onclick="gotoPay();" class="right pay_btn">去付款</a>
+		</div>
+	</div>
+	<script type="text/javascript">
+	$(function(){
+		setTotal();
+	})
+	//获得文本框对象
+	var t = $("#pointValue");
+	//数量增加操作
+	$("#add").click(function(){ 
+		//console.info(t.val)
+		t.val(parseInt(t.val())+1)
+		if (parseInt(t.val())!=1){
+			$('#min').attr('disabled',false);
+		}
+		setTotal();
+	}) 
+	//数量减少操作
+	$("#min").click(function(){
+		if (parseInt(t.val())==1){
+			$('#min').attr('disabled',true);
+			t.val(1);
+		}else{
+			t.val(parseInt(t.val())-1);
+		}
+		setTotal();
+	})
+	//计算操作
+	function setTotal(){
+		$("#total").html((parseInt(t.val())*399).toFixed(2));//toFixed()是保留小数点的函数
+	}	
+	</script>
+</body>
+</html>
