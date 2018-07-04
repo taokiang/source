@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="format-detection" content="telephone=no">
+		<title>demo</title>
+		<link rel="stylesheet" href="reset.css" />
+	</head>
+	<body ontouchstart="">
+		<div class="box ui-border"></div>
+		<div class="x"></div>
+		<div class="f"></div>
+		<p class="elli-text">文本超出增加省略号文本超出增加省略号</p>
+		<div class="elli-text-more">
+			多行文本换行多行文本换行多行文本换行多行文本换行多行文本换行多行文本换行多行文本换行多行文本换行！
+		</div>
+		<div class="middle-text mt20">
+			<div class="middle-inner-text">
+				测试文字测试文字测试文字测试
+			</div>
+		</div>
+		<div class="title-box">
+			<div class="line"></div>
+			<div class="title">测试文字</div>
+			<div class="line"></div>
+		</div>
+		<div class="pass-box mt20" id="passBox">
+			<input type="password" name="pass" value="123456"/>
+			<i state="off"></i>
+		</div>
+		<script type="text/javascript">
+			var ele_pass_box = document.getElementById("passBox");
+			var ele_pass = ele_pass_box.getElementsByTagName("input")[0];
+			var ele_eye = ele_pass_box.getElementsByTagName("i")[0];
+			ele_eye.onclick = function () {
+				var state = this.getAttribute("state");
+				if(state === "off") {
+					ele_pass.setAttribute("type", "text");
+					ele_eye.setAttribute("state", "on");
+					ele_eye.style.opacity = 0.2;
+				} else {
+					ele_pass.setAttribute("type", "password");
+					ele_eye.setAttribute("state", "off");
+					ele_eye.style.opacity = 1;
+				}
+			}
+		</script>
+	</body>
+</html>
