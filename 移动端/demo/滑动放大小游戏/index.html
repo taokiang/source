@@ -1,0 +1,178 @@
+<html>
+	<head>
+	<meta charset="utf-8">
+	<title>蝙蝠侠大战超人</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
+	<script type="text/javascript" src="js/zepto.js"></script>
+	<style type="text/css"> 
+	body{background-color:#000000;width:100%;height:100%;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;margin:0;}
+	img{display:block;border:0 none;}  
+	.page{width:100%;height:100%;overflow:hidden;position:absolute;left:0;top:0;}  
+	.page_int{width:100%;height:100%;overflow:hidden;position:absolute;left:0;top:0;z-index:1;}
+	.page01{background-image:url(images/page_01.jpg );background-size:100% 100%;background-repeat:no-repeat;}
+	.page02{background-image:url(images/page_02.jpg );background-size:100% 100%;background-repeat:no-repeat;}
+	.page03{background-image:url(images/page_03.jpg );background-size:100% 100%;background-repeat:no-repeat;}
+	.page04{width:100%;height:100%;overflow:hidden;position:absolute;left:0;top:0;background-image:url(images/yes.jpg );background-size:100% 100%;background-repeat:no-repeat;}
+	.page05{width:100%;height:100%;overflow:hidden;background-image:url(images/no.jpg );background-size:100% 100%;background-repeat:no-repeat;}
+	.drag_box{position:absolute;width:200px;height:200px;border-radius:50%;transform:scale(0);-webkit-transform:scale(0);z-index:111;overflow:hidden;background-color:rgba(0,0,0,0.5);background-image:url(images/page_01_01.jpg );background-repeat:no-repeat;}   
+	.q_box{position:absolute;bottom:14%;left:50%;margin-left:-170px;}
+	.btn_box{position:absolute;left:0;bottom:0;width:100%;height:100%;overflow:hidden;}
+	.btn_box .btn{display:block;float:left;width:33.333%;height:100%;}
+	.bang{position:absolute;left:50%;top:35%;margin-left:-9px;}
+	.tip{position:absolute;right:41%;top:54%;}
+	.click_box{position:absolute;bottom:0;left:0;right:0;height:20%;}
+	.click_box a{display:block;width:100%;height:40%;}
+	.page04 .click_box{height:30%;}
+	.page04 .click_box a{height:50%;}
+	
+	.door_left,.door_right{position:absolute;-webkit-transition:all 2s ease;transition:all 2s ease;height:100%;}
+	.door_left{left:0;top:0;-webkit-transform-origin:0 0;transform-origin:0 0;}
+	.door_right{right:0;top:0;-webkit-transform-origin:100% 0;transform-origin:100% 0;}
+	.hover .door_left{-webkit-transform:rotateY(-90deg);transform:rotateY(-90deg);}
+ 	.hover .door_right{-webkit-transform:rotateY(90deg);transform:rotateY(90deg);}
+ 	.hover .bang,.hover .tip{display:none;}
+ 	.ani_arrow{-webkit-animation:arrow 1s linear infinite;animation:arrow 1s linear infinite}
+	@-webkit-keyframes arrow{0%{opacity:.2;top:45%;}100%{opacity:1;top:54%;}}
+	@keyframes arrow{0%{opacity:.2;top:45%;}100%{opacity:1;top:54%;}}
+	</style>   
+</head>   
+<body>   
+<div class="page_int door"> 
+ 	<img class="door_left" width="50%" src="images/page_left.jpg ">
+ 	<img class="door_right" width="50%" src="images/page_right.jpg ">
+ 	<img class="bang" width="18" src="images/bangbang.png ">
+ 	<img class="tip ani_arrow" width="18" src="images/tip.png ">
+</div>
+<div class="page page01"> 
+	 <div class="q_box" data-q="1" style="display:none;">
+	 	<img width="340" src="images/q1.png ">
+	 	<div class="btn_box">
+	 		<span data-id="1-A" class="btn"></span>
+	 		<span data-id="1-B" class="btn"></span>
+	 		<span data-id="1-C" class="btn"></span>
+	 	</div>
+	 </div>
+</div>
+<div class="page page02" style="display:none;"> 
+	 <div class="q_box" data-q="2" style="display:none;">
+	 	<img width="340" src="images/q2.png ">
+	 	<div class="btn_box">
+	 		<span data-id="2-A" class="btn"></span>
+	 		<span data-id="2-B" class="btn"></span>
+	 		<span data-id="2-C" class="btn"></span>
+	 	</div>
+	 </div>
+</div>
+<div class="page page03" style="display:none;"> 
+	 <div class="q_box" data-q="3" style="display:none;">
+	 	<img width="340" src="images/q3.png ">
+	 	<div class="btn_box">
+	 		<span data-id="3-A" class="btn"></span>
+	 		<span data-id="3-B" class="btn"></span>
+	 		<span data-id="3-C" class="btn"></span>
+	 	</div>
+	 </div>
+</div>
+<div class="page04" style="display:none;"> 
+	 <div class="click_box">
+	 	 <a href="http://m.gewara.com/movie/246339082"></a>
+	 	 <a href="javascript:alert('点击右上角分享给好友吧');"></a>
+	 </div>
+</div>
+<div class="page05" style="display:none;"> 
+	 <div class="click_box">
+	 	 <a href="javascript:refresh();"></a>
+	 </div>
+</div>
+<div id="dragId" class="drag_box"></div>
+ <script type="text/javascript">
+var isdrag=false;   
+var tx,x,ty,y;
+$(function(){
+	/* 开门  */
+	$('.door').bind("touchstart",function(e){
+		e.preventDefault();
+	});
+	$('.door').bind("touchmove",function(){
+		$(this).addClass('hover');
+	});
+	$('.door').bind("touchend",function(){
+		$(this).addClass('hover');
+		setTimeout(function () {
+	        $(".door").hide();
+	    }, 2000);
+	});
+	var w = $('.page').width()+'px',h = $('.page').height()+'px';
+	$('.drag_box').css('background-size',w+' '+h);
+	/* 放大镜  */
+	 $('.page').bind("touchstart",function(e){
+		e.preventDefault();//阻止默认事件
+	   x = e.touches[0].pageX;
+	   y = e.touches[0].pageY;
+	  
+	   $(".drag_box").css({"left":x-100,"top":y-100});
+		$('.drag_box').animate({
+			'transform':'scale(1)',
+			'-webkit-transform':'scale(1)'
+		})
+		isdrag = true;   
+	   tx = parseInt(document.getElementById("dragId").style.left+0);
+	   ty = parseInt(document.getElementById("dragId").style.top+0);
+	   return false; 
+	});
+	$('.page').bind("touchmove",function(e){
+		e.preventDefault();//阻止默认事件
+		if (isdrag){   
+		   var n = tx + e.touches[0].pageX - x; 
+		   var m = ty + e.touches[0].pageY - y;
+		   var pox = -(n),poy = -(m);
+		   
+		   if($(this).hasClass('page01')){
+			   $(this).children('.q_box').show();
+		   }else if($(this).hasClass('page02')){
+			   $(this).children('.q_box').show();
+			   $('#dragId').css({'background-image':'url(images/page_02_02.jpg )'})
+		   }else if($(this).hasClass('page03')){
+			   $(this).children('.q_box').show();
+			   $('#dragId').css({'background-image':'url(images/page_03_03.jpg )'})
+		   }
+		   $(".drag_box").css({"left":n,"top":m,"background-position":pox+' '+poy}); 
+		   return false;   
+		 } 
+	});
+	$('.page').bind("touchend",function(){
+		$('.drag_box').animate({
+			'transform':'scale(0)',
+			'-webkit-transform':'scale(0)'
+		})
+		isdrag = false; 
+	}); 
+	
+	/* 选题  */
+	$('.btn').on('touchstart',function(e){
+		e.stopPropagation();
+		 var dateValue = $(this).attr('data-id');
+		 if(dateValue=='1-A'){
+			 $('.page01').hide();
+			 $('.page02').show();
+		 }else if(dateValue=='2-B'){
+			 $('.page02').hide();
+			 $('.page03').show();
+		 }else if(dateValue=='3-C'){
+			 $('.page03').hide();
+			 $('.page04').show();
+		 }else{
+			 $('.page04').hide();
+			 $('.page05').show();
+		 }
+	});
+	$('.btn').on('touchend',function(){
+		return false;
+	});
+}); 
+function refresh(){
+    window.location.reload();//刷新当前页面
+}
+</script>
+ </body> 
+</html> 
