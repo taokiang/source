@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>九宫格抽奖</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
+		<script type="text/javascript" src="http://apps.bdimg.com/libs/zepto/1.1.4/zepto.min.js"></script>
+		<style  type="text/css">
+		html,body{background:#fff;margin:0;font-family:"Microsoft YaHei",SimSun,sans-serif;font-size:62.5%;-webkit-tap-highlight-color:rgba(0,0,0,0);}
+		.page{max-width:640px;margin:0 auto;overflow-x:hidden;background:#1da6db;}
+		.banner{display:block;}
+		.banner_box{position:relative;height:500px;}
+		.game_area{position:absolute;top:0;left:0;right:0;}
+		.game_area .sudoku{width:82%;background:#194364;border-radius:10px;margin:0 auto;overflow:hidden;list-style:none;padding:10px 10px 0;box-sizing:border-box;-webkit-box-sizing:border-box;}
+		.game_area .sudoku li{float:left;width:30%;margin-right:5%;margin-bottom:5%;text-align:center;background:#d0f7f6;border-radius:10px;padding:10px;box-sizing:border-box;-webkit-box-sizing:border-box;box-shadow:0 3px 0 #1b8ac3;-webkit-box-shadow:0 3px 0 #1b8ac3;}
+		.game_area .sudoku li:nth-child(3n){margin-right:0;}
+		.game_area .sudoku li.active{border:4px solid #feea83;}
+		.active_text{position:absolute;top:0;left:0;right:0;padding:10px 10% 0;}
+		.active_text p{font-size:13px;line-height:20px;color:#fff;margin:0;}
+		</style>	
+	</head>
+	<body>
+		<div class="page">
+			<div class="banner_box">
+				<div class="game_area" id="lottery">
+	            	<ul class="sudoku">
+		              	<li class="lottery-unit lottery-unit-1 active">
+		               	<img class="prize_img" width="100%" src="images/prize_img_01.jpg">
+		               </li>
+		              	<li class="lottery-unit lottery-unit-2">
+		               	<img class="prize_img" width="100%" src="images/prize_img_02.jpg">
+		               </li>
+		              	<li class="lottery-unit lottery-unit-3">
+		               	<img class="prize_img" width="100%" src="images/prize_img_03.jpg">
+		               </li>
+		              	<li class="lottery-unit lottery-unit-8">
+		               	<img class="prize_img" width="100%" src="images/prize_img_04.jpg">
+		               </li>
+		              	<li class="lottery-unit" id="startBtn">
+		               	<img class="prize_img" width="100%" src="images/prize_img_start.jpg">
+		               </li>
+		              	<li class="lottery-unit lottery-unit-4">
+		               	<img class="prize_img" width="100%" src="images/prize_img_05.jpg">
+		               </li>
+		              	<li class="lottery-unit lottery-unit-7">
+		               	<img class="prize_img" width="100%" src="images/prize_img_06.jpg">
+		               </li>
+		              	<li class="lottery-unit lottery-unit-6">
+		               	<img class="prize_img" width="100%" src="images/prize_img_07.jpg">
+		               </li>
+		              	<li class="lottery-unit lottery-unit-5">
+		               	<img class="prize_img" width="100%" src="images/prize_img_08.jpg">
+		               </li>
+	               </ul>
+            	</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+		
+		var lottery={
+			index:-1,	//当前转动到哪个位置，起点位置
+			count:0,	//总共有多少个位置
+			timer:0,	//setTimeout的ID，用clearTimeout清除
+			speed:20,	//初始转动速度
+			times:0,	//转动次数
+			cycle:20,	//转动基本次数：即至少需要转动多少次再进入抽奖环节
+			prize:-1,	//中奖位置
+			init:function(id){
+				if ($("#"+id).find(".lottery-unit").length>0) {
+					lotteryId = $("#"+id);
+					units = lotteryId.find(".lottery-unit");
+					this.obj = lotteryId;
+					this.count = units.length;
+					lotteryId.find(".lottery-unit-"+this.index).addClass("active");
+				};
+			},
+			roll:function(){
+				var index = this.index;
+				var count = this.count;
+				var lottery = this.obj;
+				$(lottery).find(".lottery-unit-"+index).removeClass("active");
+				index += 1;
+				if (index>count-1) {
+					index = 0;
+				};
+				$(lottery).find(".lottery-unit-"+index).addClass("active");
+				this.index=index;
+				return false;
+			},
+			stop:function(index){
+				this.prize=index;
+				return false;
+			}
+		}; 
+		$(function(){
+			lottery.init("lottery");//初始化
+			var ready = false;
+			$("#startBtn").on('click',function(){
+				if(ready == false){
+					roll();
+					ready = true;
+				}else{
+					alert('您已抽过');
+				}
+				
+			});
+		});
+		function roll(){
+			lottery.times += 1;
+			lottery.roll();
+			if (lottery.times > lottery.cycle+10 && lottery.prize==lottery.index) {
+				clearTimeout(lottery.timer);
+				lottery.prize=-1;
+				lottery.times=0;
+			}else{
+				if (lottery.times<lottery.cycle) {
+					lottery.speed -= 10;
+				}else if(lottery.times==lottery.cycle) {
+					$.ajax({
+						type : "post",
+						dataType : "json",
+						url : "${wapPath}wz/botao/draw.xhtml",
+						success : function(result) {
+							if(result.success){
+								lottery.prize = parseInt(7);
+								switch (lottery.prize){
+									case 1:
+										setTimeout(function(){
+											alert('1');
+										},4000);
+								   break;
+									case 2:
+										setTimeout(function(){
+											alert('2');
+										},4000);
+									break;
+									case 3:
+										setTimeout(function(){
+											alert('3');
+										},4000);
+									break;
+									case 4:
+										setTimeout(function(){
+											alert('4');
+										},4000);
+									break;
+									case 5:
+										setTimeout(function(){
+											alert('5');
+										},4000);
+									break;
+									case 6:
+										setTimeout(function(){
+											alert('6');
+										},4000);
+									break;
+									case 7:
+										setTimeout(function(){
+											alert('7');
+										},4000);
+									break;
+									default:
+										setTimeout(function(){
+											alert("没中奖！");
+										},4000);
+									break;
+								}
+							}
+						}
+					});
+					
+					
+				}else{
+					if (lottery.times > lottery.cycle+10 && ((lottery.prize==0 && lottery.index==7) || lottery.prize==lottery.index+1)) {
+						lottery.speed += 110;
+					}else{
+						lottery.speed += 20;
+					}
+				}
+				if (lottery.speed<40) {
+					lottery.speed=40;
+				};
+				lottery.timer = setTimeout(roll,lottery.speed);
+			}
+		}
+		
+		</script>
+	</body>
+</html>

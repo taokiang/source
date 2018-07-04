@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>加载更多</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
+	<script type="text/javascript" src="js/zepto.js"></script>
+	<style  type="text/css">
+	body,html{background:#dde1e6;color:#fff;margin:0;padding:0;}
+	.page{max-width:750px;margin:0 auto;overflow-x:hidden;}
+	.morebtn{display:block;width:80%;height:30px;line-height:30px;background:#fff;color:#000;text-align:center;margin:20px auto;border-radius:4px;}
+	</style>	
+</head>
+<body>
+	<div class="page">
+		<div id="moreList" style="height:1000px;"></div>
+		<span class="morebtn" id="moreBtn"></span>
+	</div>
+<script type="text/javascript">
+$(function(){
+	/* 向下滑动加载更多 */
+	var pageTop = function(){
+		var d = document,y = (navigator.userAgent.toLowerCase().match(/iPad/i) == "ipad") ? window.pageYOffset : Math.max(d.documentElement.scrollTop, d.body.scrollTop);
+		return d.documentElement.clientHeight + y;
+	};
+	var moreBtn = document.getElementById('moreBtn');
+	document.addEventListener('scroll',function(){
+		console.log(moreBtn.offsetTop,pageTop())
+	 	if($('moreBtn')){
+			if(moreBtn.offsetTop <= pageTop()){
+				pullAction();
+			}
+		}
+	});
+	
+});
+var pageNo=0,catchs = true;
+function pullAction(){
+	var moreBtn = $('#moreBtn'),el = $('#moreList');
+	if(catchs){
+		if(!moreBtn.hasClass('loading')){
+			moreBtn.addClass('loading');
+			moreBtn.html('加载中...');	
+			setTimeout(function () {
+				$.ajax({
+					'url':'ajax/newlist.xhtml',
+					'callback':function(result){
+						if(result.html != ''){
+							moreBtn.removeClass('loading');
+							el.append(result.html);
+							moreBtn.html('查看更多&nbsp;&gt;');
+							
+						}else{
+							moreBtn.dispose();
+						}
+						catchs = true;
+					},
+					'data':{'pageNo':pageNo++},
+					'type':'post'
+				});
+			}, 1000);
+		}
+	}
+}
+</script>
+</body>
+</html>

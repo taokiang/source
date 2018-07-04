@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1,minimum-scale=1 maximum-scale=1, user-scalable=0">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no">
+	<title>倒计时60s，发送短信</title>
+	<style type="text/css">
+		body{padding:100px;text-align: center;}
+		.sameBtn{display: inline-block;font-size:12px;cursor:pointer;width:76px;height:25px;line-height: 25px;text-align: center;border:0;background: #3186df;color:#fff;}
+		.sameBtn.current{background: #b1b1b1;}
+
+	</style>
+</head>
+<body ontouchstart="">
+	<button onclick="setTime(this);">获取验证码</button>
+
+	<!-- 代码 开始 -->
+	<input type="button" class="sameBtn btnCur" value="发送验证码"/>
+	<div class="sameBtn btnCur2">发送验证码</div>
+
+	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+	<script src="js/CountDownF.js"></script>
+
+	<script type="text/javascript">
+		$(function(){
+			$(".btnCur").CountDownF({
+				time:120,
+				countState:true,
+				callback:function(){
+					/*setTimeout(function(){
+						$(".btnCur").CountDownF('clearState');
+					},3000);*/
+				}
+			});
+
+			$(".btnCur2").CountDownF({
+				time:50,
+				countState:true,
+				cnSeconds:'秒',
+				callback:function(){
+					/*setTimeout(function(){
+						$(".btnCur2").CountDownF('clearState');
+					},5000);*/
+				}
+			});
+		})
+
+		var countdown=60; 
+		function setTime(obj) { 
+		    if (countdown == 0) { 
+		        obj.removeAttribute("disabled"); 
+		        obj.className = "tar ui-border-l cur";   
+		        obj.innerHTML="获取验证码"; 
+		        countdown = 60; 
+		        return;
+		    } else { 
+		        obj.setAttribute("disabled", true); 
+		        obj.className = "tar ui-border-l"; 
+		        obj.innerHTML="重新发送(" + countdown + ")"; 
+		        countdown--; 
+		    } 
+			setTimeout(function() { 
+			    setTime(obj) 
+			},1000) 
+		}
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>swiper</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
+	<link rel="stylesheet" href="css/swiper.min.css">
+	<script type="text/javascript" src="js/zepto.js"></script>
+	<script type="text/javascript" src="js/swiper-3.3.1.jquery.min.js"></script>
+	<style  type="text/css">
+	body,html{background:#dde1e6;color:#fff;margin:0;padding:0;}
+	 *,:after,:before{box-sizing: border-box;}
+	.page{max-width:750px;margin:0 auto;overflow-x:hidden;}
+	.swiper-slide img{width:100%;}
+	.box{width:94%;margin:0 auto 1em;background:#fff;padding:2em 0 1em;}
+	.wrap{width:85.39%;margin:0 auto;}
+	.selling-box{overflow:visible;width:94%;}
+	.selling-box .swiper-slide{padding:0 3.5%;}
+	.list-item{background:#b2b2b2;}
+	</style>	
+</head>
+<body>
+	<div class="page">
+		<div class="box">
+			<div class="wrap">
+				<div class="swiper-container selling-box">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide">
+							<div class="list-item">
+								<img src="images/selling1.jpg" class="selling-img">
+							</div>
+						</div>
+						<div class="swiper-slide">
+							<div class="list-item">
+								<img src="images/selling2.jpg" class="selling-img">
+							</div>
+						</div>
+						<div class="swiper-slide">
+							<div class="list-item">
+								<img src="images/selling3.jpg" class="selling-img">
+							</div>
+						</div>
+						<div class="swiper-slide">
+							<div class="list-item">
+								<img src="images/selling4.jpg" class="selling-img">
+							</div>
+						</div>
+						<div class="swiper-slide">
+							<div class="list-item">
+								<img src="images/selling5.jpg" class="selling-img">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<script type="text/javascript">
+$(function(){
+	var selling = new Swiper('.selling-box',{  
+		//pagination: '.swiper-pagination',
+		paginationClickable: true,
+		loop : true 
+		//nextButton: '.selling-box .arrowr',
+		//prevButton: '.selling-box .arrowl', 
+	})  
+});
+</script>
+</body>
+</html>

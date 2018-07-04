@@ -1,0 +1,724 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8" http-equiv="Content-Type" />
+	<meta http-equiv="Cache-Control" content="no-cache" />
+	<title>疯狂情人节</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, minimal-ui"/>
+	<script type="text/javascript" src="js/zepto.js"></script>
+	<style type="text/css">
+	html,body,.layout_ui{width:100%;height:100%;background:#e3263c;color:#FFF;overflow: hidden;-webkit-tap-highlight-color: transparent;-webkit-appearance: none;}
+	.mt20{margin-top:20px;}
+	.page {width:100%;height:101%;position:absolute;background:#e3263c;top:0;overflow:hidden;-webkit-box-sizing:border-box;box-sizing:border-box;display:block;}
+	/* loading */
+	.loading_wrap {position:absolute;width:280px;height:200px;left:50%;margin-left:-140px;top:35%;text-align: center;}
+	.move_heart {display:inline-block;width:80px;height:80px;margin-bottom:20px;background:url(images/move_heart.png?v=$VmUtils.jsVersion) no-repeat;background-size:contain;
+		animation: ani_shake  ease 2s infinite;
+		-webkit-animation: ani_shake  ease 2s infinite;
+	}
+	.loading_bar {position:relative;height:8px;border-radius:2px;margin-bottom:10px;background:#FFF;}
+	.loading_bar span {position:absolute;height:12px;border-radius:4px;background:#FFC91F;margin-top:-2px;left:0;}
+	.loading_rate {font-size:22px;}
+	
+	/*page01*/
+	.page01{background:url(images/page01.jpg?v=$VmUtils.jsVersion) no-repeat;background-size:100% auto;}
+	.btn_box{overflow:hidden;position:absolute;bottom:0;left:0;width:100%;height:26%;}
+	.gz_btn{float:left;display:block;width:50%;height:100%;}
+	.go_btn{float:right;display:block;width:50%;height:100%;}
+	.heart_box{position:absolute;top:28%;right:0;height:75px;width:100%;}
+	.heart_box .heart01{position:absolute;right:19%;bottom:0;}
+	.heart_box .heart02{position:absolute;right:12%;bottom:15%;}
+	.heart_box .heart03{position:absolute;right:14%;bottom:60%;}
+	
+	.text_box{width:100%;padding:5px;border-radius:10px;background:-webkit-gradient(linear,center top,center bottom,from(#ff782e), to(#fa6981));background:-webkit-linear-gradient(top,#ff782e,#fa6981);}
+	.text_context{padding:15px;border-radius:10px;background:#ffd2ad;font-size:12px;line-height:24px;color:#644f49;}
+	.gz_title{font-size:25px;line-height:30px;color:#ff782e;font-weight:bold;text-align:center;}
+	.close_btn{display:block;width:45%;text-align:center;line-height:40px;font-size:18px;font-weight:bold;color:#ffe5c0;border-radius:20px;margin:25px auto 0;height:40px;border:1px solid #ffe6d2;background:-webkit-gradient(linear,center top,center bottom,from(#ffbc99), to(#fa6a80));background:-webkit-linear-gradient(top,#ffbc99,#fa6a80);box-shadow: 3px 4px 8px #bb7364;}
+	.popup{padding:0 15%;}
+	.niutou_img{margin:0 auto;display:block;}
+	.text_tip{font-size:16px;line-height:24px;color:#ffdac5;text-align:center;}
+	#popup_02 p{text-align:center;font-size:24px;color:#594642;}
+	
+	/*page02*/
+	.top_box{overflow:hidden;position:absolute;top:0;left:0;padding:10px 20px;width:100%;-webkit-box-sizing:border-box;box-sizing:border-box;color:#ffdac5;font-size:15px;line-height:15px;}
+	.left_box{float:left;display:block;}
+	.right_box{float:right;display:block;}
+	.img{display:inline-block!important;vertical-align:bottom;}
+	.hand{position:absolute;left:57%;bottom:6%;margin-left:-5%;z-index:111;}
+	.falling_img{position:absolute;top:-100%;left:50%;margin-left:-40%;z-index:111;}
+
+	#canvas {position:absolute;left:0;top:0px;width:100%;height:100%;background:#e3263c;}
+	/* 游戏成功弹框 */
+	.page05{padding:30px;background:rgba(0,0,0,0.8);}
+	.mobile_box{background:#e82a3e;padding:5px 8px;margin:20px auto;border-radius:2px;text-align:center;width:80%;-webkit-box-sizing:border-box;box-sizing:border-box;}
+	.mobile{height:40px;border-radius:4px;outline:none;padding:0 5px;border:0;background:#ffe0c7;width:100%;-webkit-box-sizing:border-box;box-sizing:border-box;}
+	.mobile::-webkit-input-placeholder{color:#e0c2a9;}
+	.capcha_img{display:inline-block;border-radius:5px; width: 60px;height:34px;vertical-align: middle;margin-left:10px;}
+	.captcha_input{width:50%;margin-top:5px;}
+	/* 游戏失败弹框 */
+	#page04{padding:25% 10%;}
+	#page04 p{text-align:center;font-size:24px;color:#594642;}
+	/* 奖项 */
+	.prize{position:relative;}
+	.prize_num{font-size:15px;color:#ffd7b2;line-height:22px;position:absolute;top:16%;left:50%;-webkit-transform:translatex(-50%);transform:translatex(-50%);display:block;width:100%;text-align:center;}
+	.hide_btn{display:block;position:absolute;bottom:0;width:100%;height:40px;}
+	/* 动画 */
+	.scale_center01{opacity:0;-webkit-animation:scaleCenter 3s ease infinite;animation:scaleCenter 3s ease infinite;}
+	.scale_center02{opacity:0;-webkit-animation:scaleCenter 3s ease infinite;animation:scaleCenter 3s ease infinite;animation-delay:2s;-webkit-animation-delay:2s;}
+	.scale_center03{opacity:0;-webkit-animation:scaleCenter 3s ease infinite;animation:scaleCenter 3s ease infinite;animation-delay:3s;-webkit-animation-delay:3s;}
+	.scaleAnim{-webkit-animation:scaleAnim 1s ease infinite;animation:scaleAnim 1s ease infinite;}
+	
+	@-webkit-keyframes scaleCenter {
+		from { -webkit-transform: scale(0);opacity:1;}
+		to {-webkit-transform: scale(1);opacity:0;}
+	}
+	@keyframes scaleCenter {
+		from {transform: scale(0);opacity:1;}
+		to {transform: scale(1);opacity:0;}
+	}
+	@-webkit-keyframes scaleAnim {
+		from { -webkit-transform: scale(1);}
+		to {-webkit-transform: scale(0.5);}
+	}
+	@keyframes scaleAnim {
+		from {transform: scale(1);}
+		to {transform: scale(0.5);}
+	}
+	@keyframes ani_shake
+	{
+		0% {transform:none; }
+		90% {transform:none; }
+		92% {transform:rotate(10deg);transform-origin:50% 100%;}
+		93% {transform:rotate(-10deg);transform-origin:50% 100%;}
+		94% {transform:rotate(10deg);transform-origin:50% 100%;}
+		95% {transform:rotate(-10deg);transform-origin:50% 100%;}
+		100% {transform:none; }
+	}
+	@-webkit-keyframes ani_shake 
+	{
+		0% {-webkit-transform:none; }
+		90% {-webkit-transform:none; }
+		92% {-webkit-transform:rotate(10deg);-webkit-transform-origin:50% 100%;}
+		93% {-webkit-transform:rotate(-10deg);-webkit-transform-origin:50% 100%;}
+		94% {-webkit-transform:rotate(10deg);-webkit-transform-origin:50% 100%;}
+		95% {-webkit-transform:rotate(-10deg);-webkit-transform-origin:50% 100%;}
+		100% {-webkit-transform:none; }
+	}
+	</style>
+</head>
+<body>
+<div class="layout_ui" data-type="layout">
+	<div class="page page0" id="page0" >
+		<div class="loading_wrap">
+			<div><i class="move_heart"></i></div>
+			<div  class="loading_main">
+				<div class="loading_bar"><span style="width:0"></span></div>
+				<div class="loading_rate"><span id="rate_num">0</span>%</div>
+			</div>
+		</div>
+	</div>
+	<div class="page page01" id="page01" style="left:0;display:none;">
+		<div class="btn_box">
+			<a class="gz_btn" href="javascript:$('#popup_01').show();"></a>
+			<a class="go_btn" href="javascript:game_start();"></a>
+		</div>
+		<div class="heart_box">
+			<img class="heart01 scale_center01" width="10" alt="" src="images/red_heart.png?v=$VmUtils.jsVersion">
+			<img class="heart02 scale_center02" width="13" alt="" src="images/red_heart.png?v=$VmUtils.jsVersion">
+			<img class="heart03 scale_center03" width="26" alt="" src="images/red_heart.png?v=$VmUtils.jsVersion">
+		</div>
+	</div>
+	<div class="page page02" id="page02" style="left:100%">
+		<img class="falling_img" width="80%" alt="" src="images/falling.png?v=$VmUtils.jsVersion">
+		<img class="hand scaleAnim" width="10%" alt="" src="images/hand.png?v=$VmUtils.jsVersion">
+		<canvas width="750" height="1200" id="canvas"></canvas>
+	</div>
+	<!-- 活动规则 -->
+	<div id="popup_01" class="popup" style="display:none;">
+		<img class="niutou_img" width="50%" alt="" src="images/niutou.png?v=$VmUtils.jsVersion">
+		<div class="text_box">
+			<div class="text_context">
+				<h2 class="gz_title">游戏规则</h2>
+				<p class="mt20">1.本次活动时间 2016.3.11——2016.3.18；</p>
+				<p>2.用户在规定 15s 时间内，接到 15 个以上礼物即可获得情人节抽奖机会；</p>
+				<p>3.本次活动礼品包括积分、红酒、蛋糕、电影周边兑换券每个用户仅限领取一次；</p>
+				<p>4.活动最终解释权归格瓦拉所有，如有疑问请致电格瓦拉客服：10101068。</p>
+				<a class="close_btn" href="javascript:$('#popup_01').hide();">我知道啦</a>
+			</div>
+		</div>
+	</div>
+	<!-- 游戏失败 -->
+	<div id="page04" class="page page05" style="display:none;">
+		<img class="niutou_img" width="90%" alt="" src="images/wugui.png?v=$VmUtils.jsVersion">
+		<div class="text_box">
+			<div class="text_context">
+				<h2 class="gz_title">啊~哦~</h2>
+				<p class="mt20">接到15份礼物</p>
+				<p>才是十全十美哦</p>
+				<a class="close_btn" href="javascript:rePlay();">再来一次</a>
+				<a class="close_btn" href="javascript:void(0);" onclick="share();">分享朋友圈</a>
+			</div>
+		</div>
+	</div>
+	<!-- 游戏成功 -->
+	<div id="page05" class="page page05" style="left:100%;">
+		<img class="niutou_img" width="100%" alt="" src="images/wheel.png?v=$VmUtils.jsVersion">
+		<p class="text_tip mt20">快输入手机号码，领取情人节惊喜！</p>
+		<div class="mobile_box">
+			<input class="mobile" id="mobileBox" type="tel" maxlength="11" placeholder="输入手机号码"/>
+			<p style="text-align:left;">
+				<input class="mobile captcha_input" id="captchaLoginInput" type="text"  placeholder="请输入验证码" ><img id="captchaLoginImg" bind="event" onclick="refreshCaptcha();" class="capcha_img"/></p>
+			</p>
+			<input type="hidden" name="captchaId" id="captchaLogin"/>
+		</div>
+		<a href="javascript:checkTel();"><img class="niutou_img" width="30%" alt="" src="images/draw_btn.png?v=$VmUtils.jsVersion"></a>
+	</div>
+	<!-- 奖项 -->
+	<div id="prizeId" class="prize" style="display:none;">
+		<img width="100%" alt="" src="images/prize_xf.jpg?v=$VmUtils.jsVersion">
+		<span class="prize_num">兑换码为：<em id="prizeNum"></em></span><!-- 券已绑定至您的格瓦拉账户 -->
+		<a class="hide_btn" href="javascript:hideFunc($('#prizeId'))">
+		</a>
+	</div>
+</div>
+<script>
+	var preDefault = function (e) {
+        e.preventDefault();
+    };
+	document.addEventListener('touchmove', preDefault,false);
+	Zepto(function($){
+		var inputs = $('.mobile_box').find('input');
+		if(inputs){
+			inputs.each(function(index,item){
+				if(this.type == 'text'){							
+					this.value='';
+				}
+			});
+		};		
+		var loading_rate=0;
+		var rate_node=$('.loading_bar span');
+		var rate_num=$('#rate_num');
+		var imgData=[
+			{"name":bgImage,"url":"images/page02_bg.jpg"},
+			{"name":giftImage,"url":"images/play_gifts.png"},
+			{"name":leftImg,"url":"images/clock.png"},
+			{"name":rightImg,"url":"images/flag.png"},
+			{"name":arrowLeft,"url":"images/left_arrow.png"},
+			{"name":arrowRight,"url":"images/right_arrow.png"},
+			{"name":moveImg,"url":"images/zhudi.png"}
+		];
+		var imgData0=[
+			{"url":"images/page02_bg.jpg"},
+			{"url":"images/red_heart.png"}
+		];
+		var jd=0;
+		$.each(imgData0,function(i){
+	            var newImg=new Image();
+	            newImg.src=imgData0[i].url;
+	            newImg.onload = newImg.onerror =function(){
+	                jd++;
+	                if(jd>=2){
+        				var loop=setInterval(function(){
+							if(loading_rate < 95){
+
+								loading_rate++;
+								rate_node.css('width',loading_rate*2.8);
+								rate_num.html(loading_rate);
+							}else if(loading_rate >= 95 && loading_rate < 100){
+								//console.info(jd);
+								if(jd>=2&&bgImage.ready&&giftImage.ready&&leftImg.ready&&rightImg.ready&&arrowLeft.ready&&arrowRight.ready&&moveImg.ready){
+									loading_rate++;
+									rate_node.css('width',loading_rate*2.8);
+									rate_num.html(loading_rate);
+								}
+							}
+							else if(loading_rate >= 100){
+								$('#page0').css('display','none');
+								$('#page01').css('display','block');
+								clearInterval(loop);
+							}
+						},'50'); 
+       			
+                     $.each(imgData,function(j){
+                     	imgData[j]['name'].src=imgData[j].url;                     	
+                     });                
+        		};
+            };
+        });
+		
+	})
+	function game_start(){
+		$('#page01').animate({
+        left:'-100%'
+        }, 2000,
+        'ease-out');
+		$('#page02').animate({
+        left:'0'
+        }, 2000,
+        'ease-out');
+		$('.falling_img').animate({
+	        top:'0'
+	        }, 2000,
+	        'ease-out',function(){
+		        	setTimeout(function(){
+		        		$('.falling_img').hide();
+		        		$('.hand').hide();
+		        	},1500);
+		        	
+	   		}
+       );
+		Game.start();
+	}
+	function rePlay(){
+		window.location.reload();
+	}
+</script>
+
+ <script type="text/javascript">
+ 	function refreshCaptcha(){
+		$("#captchaLoginImg").attr("src",""+new Date());
+	}
+	if(window.location.href.indexOf("regCollBack=draw")!=-1){
+		$('#page05').css({'left':'0','display':'block'});
+	}
+ 	var drawZiGe=false;
+	var isMobile = function(str) {
+		if(str.length != 11){
+			return false;
+		}
+		return /^\d+$/.test(str)
+	}
+	function checkTel() {
+		if(!drawZiGe){
+			alert("请先玩游戏再抽奖哦");
+			return;
+		}
+		var mobileBox = $('#mobileBox').val();
+		if ("" ==mobileBox) {
+			alert("请输入你的手机号码！");
+			return;
+		}
+		if (!isMobile(mobileBox)){
+			alert("请输入正确的手机号码！");
+			return;
+		}
+		var sendurl = "/draw.xhtml";
+		var senddata = {
+			"mobile" : mobileBox,
+			"captcha":$("#captchaLoginInput").val(),
+			"captchaId":$("#captchaLogin").val()
+		}
+		$.ajax({
+			type : "post",
+			dataType : 'json',
+			url : sendurl,
+			data : senddata,
+			success : function(result) {
+				if (result.success) {
+					var drawType= result.drawType;
+					var prizeName=result.drawvalve;
+					var code=result.code;
+					if(drawType=="THANKS"){
+						alert(prizeName);
+						$('#page05').css('display','none');
+						$('#page01').css('left','0');
+					}else{
+						if(drawType=="JIFEN"){
+							alert(prizeName);
+							showFunc($('#prizeId'));//显示抽奖结果
+						}else{
+							alert(result.drawvalve);
+						}
+					}
+				}else{
+					if(result.msg=="noreg"){
+						document.location.href = 'http://m.gewara.com/touch/register.xhtml?lastpage='+encodeURIComponent(location.href+"?regCollBack=draw");
+					}else{
+						alert(result.msg);
+					}
+					refreshCaptcha();
+				}			   
+			}
+		});
+	}
+	function showFunc(item){
+		$(item).show();
+	}
+	function hideFunc(item){
+		$(item).hide();
+	}
+</script>
+ <!-- canvas游戏开始 -->
+<script type="text/javascript">
+	var canvas = document.getElementById("canvas");
+	var ctx = canvas.getContext("2d");
+	var pageWidth=$("body").offset().width;
+	var xRatio=canvas.width/pageWidth;
+	var raf;
+	var delta=0;
+	var now = Date.now();
+	var then = Date.now();
+	var Game ={
+		score:0,
+		suc_score:15,//游戏成功分数
+		one_score:10,
+		gift_speed:500,
+		gift_initY:300,
+		gift_maxY:1200,
+		remain_time:15,//游戏总时间
+		int_time:15,
+		gift_index:0,
+		gift_t:0.5,
+		front_hand:"right",
+		start:function(){
+			ctx.drawImage(bgImage,0,0);	
+			drawDoraemon();
+			drawMoveImg();				
+			drawGifts();
+			drawTxts();
+			setTimeout(function(){
+				reset();
+				main();
+			},'2000');
+			
+		}
+	}
+	var plusNum=function() {
+		this.destX=0;
+		this.destY=0;
+		this.show=false;
+		this.time=20;
+	}
+	var plusNum1=new plusNum();
+	// Background image
+	var bgImage = new Image();
+	bgImage.ready =false;
+	bgImage.onload = function() {
+		bgImage.ready = true;
+	};
+	var giftImage = new Image();
+	giftImage.ready =false;
+	giftImage.onload = function() {
+		giftImage.ready = true;
+	};
+	giftImage.sourceWidth=280;
+	giftImage.sourceHeight=280;
+	var leftImg = new Image();
+	leftImg.ready =false;
+	leftImg.onload = function() {
+		leftImg.ready = true;
+	}; 
+	
+	var rightImg = new Image();
+	rightImg.ready =false;
+	rightImg.onload = function() {
+		rightImg.ready = true;
+	};
+	
+	var arrowLeft = new Image();
+	arrowLeft.ready = false;
+	arrowLeft.onload = function() {
+		arrowLeft.ready = true;
+	};
+	arrowLeft.destX=41;
+	arrowLeft.destY=1050;
+	arrowLeft.show=true;
+	arrowLeft.alpha=0;
+	arrowLeft.rTime=100;
+	arrowLeft.sTime=5;
+	arrowLeft.alphaPlus=true;
+	var arrowRight = new Image();
+	arrowRight.ready =false;
+	arrowRight.onload = function() {
+		arrowRight.ready = true;
+	};
+	arrowRight.destX=600;
+	arrowRight.destY=1050;
+	arrowRight.show=true;
+	var moveImg = new Image();
+	moveImg.ready =false;
+	moveImg.onload = function() {
+		moveImg.ready = true;
+	};
+	moveImg.destX=300;
+	moveImg.destY=730;
+	moveImg.sourceWidth=230;
+	moveImg.sourceHeight=470;
+	var gifts=[];
+	//ctx.drawImage(giftImage,item.sourceX,item.sourceY,item.sourceWidth,item.sourceHeight,item.destX,item.destY,item.sourceWidth,item.sourceHeight);
+	gifts[0]={sourceX:0,sourceY:0,sourceWidth:90,sourceHeight:90,destX:100, destY:Game.gift_initY,show:true,xSpeed:-500};
+	gifts[1]={sourceX:90,sourceY:0,sourceWidth:90,sourceHeight:90,destX:163, destY:Game.gift_initY,show:false};
+	gifts[2]={sourceX:180,sourceY:0,sourceWidth:90,sourceHeight:90,destX:300, destY:Game.gift_initY,show:false};
+	gifts[3]={sourceX:260,sourceY:0,sourceWidth:90,sourceHeight:90,destX:443, destY:Game.gift_initY,show:false};
+	// for (var i = 0; i < 18; i++) {
+	// 	gifts[i]={sourceX:400*i,sourceY:0,sourceWidth:400,sourceHeight:400,destX:200, destY:Game.gift_initY};
+	// };
+	var touchX=0,touchY=0;
+    function canvas_touch (event){
+        var event = event || window.event; 
+        switch(event.type){
+        	case "touchstart":
+            	var offsetX = canvas.offsetLeft;
+            	var offsetY = canvas.offsetTop;
+            	touchX = (event.changedTouches[0].clientX + document.body.scrollLeft || event.changedTouches[0].pageX) - offsetX;
+            	touchY = (event.changedTouches[0].clientY + document.body.scrollLeft || event.changedTouches[0].pageY) - offsetY;
+            	event.preventDefault();		            	
+                break;
+            case "touchmove":
+            	var offsetX = canvas.offsetLeft;
+            	var offsetY = canvas.offsetTop;
+            	var x = (event.changedTouches[0].clientX + document.body.scrollLeft || event.changedTouches[0].pageX) - offsetX;
+            	// var y = (event.changedTouches[0].clientY + document.body.scrollLeft || event.changedTouches[0].pageY) - offsetY;
+            	x+=(x-touchX)*xRatio;
+            	if(x<0){
+            		x=0;
+            	}
+            	else if(x>600){
+            		x=600; 
+            	}
+           		moveImg.destX=x;
+           		event.preventDefault();
+                break;
+            case "touchend":
+            	touchX = 0;
+            	touchY = 0;
+            	event.preventDefault();		            	
+                break;
+        }
+    }
+	canvas.addEventListener('touchstart',canvas_touch, false);
+	canvas.addEventListener('touchmove',canvas_touch, false);
+	canvas.addEventListener('touchend',canvas_touch, false);
+	var drawGifts=function(){
+		$.each(gifts, function(index, item){
+			if(item.show){
+				ctx.drawImage(giftImage,item.sourceX,item.sourceY,item.sourceWidth,item.sourceHeight,item.destX,item.destY,item.sourceWidth,item.sourceHeight);
+			};
+		});	
+		
+	};
+	var drawDoraemon=function(){
+		if("right"==Game.front_hand){
+			ctx.save();
+			//ctx.rotate(leftImg.guiji.now*Math.PI/180);	//-25 ~ 25
+			ctx.drawImage(leftImg,50,30);
+			ctx.restore();	
+			//ctx.drawImage(fallingImg,80,0);
+			ctx.save();
+			ctx.translate(750,0);
+			//ctx.rotate(rightImg.guiji.now*Math.PI/180);	//-15 ~ 10
+			ctx.translate(-750,0);
+			ctx.drawImage(rightImg,500,30);					
+			ctx.restore();
+		}
+		else if("left"==Game.front_hand) {
+			ctx.save();
+			ctx.translate(750,0);
+			//ctx.rotate(rightImg.guiji.now*Math.PI/180);	//-15 ~ 10
+			ctx.translate(-750,0);
+			ctx.drawImage(rightImg,500,30);					
+			ctx.restore();
+			//ctx.drawImage(fallingImg,80,0);	
+			ctx.save();
+			//ctx.rotate(leftImg.guiji.now*Math.PI/180);	//-15 ~ 10
+			ctx.drawImage(leftImg,50,30);
+			ctx.restore();					
+			
+		}
+		else if("dora"==Game.front_hand) {
+			//ctx.drawImage(fallingImg,80,0);
+			ctx.save();
+			//ctx.rotate(leftImg.guiji.now*Math.PI/180);	//-25 ~ 25
+			ctx.drawImage(leftImg,-320,-390);
+			ctx.restore();	
+			ctx.save();
+			ctx.translate(750,0);
+			//ctx.rotate(rightImg.guiji.now*Math.PI/180);	//-15 ~ 10
+			ctx.translate(-750,0);
+			ctx.drawImage(rightImg,540,-390);					
+			ctx.restore();
+		}
+		else{
+			ctx.save();
+			//ctx.rotate(leftImg.guiji.now*Math.PI/180);	//-25 ~ 25
+			ctx.drawImage(leftImg,-320,-390);
+			ctx.restore();	
+			ctx.save();
+			ctx.translate(750,0);
+			//ctx.rotate(rightImg.guiji.now*Math.PI/180);	//-15 ~ 10
+			ctx.translate(-750,0);
+			ctx.drawImage(rightImg,540,-390);					
+			ctx.restore();
+			//ctx.drawImage(fallingImg,80,0);
+		}
+		
+		
+	};
+	var drawMoveImg=function(){
+		if(arrowLeft.show) {
+			ctx.save();
+			ctx.globalAlpha=arrowLeft.alpha/100;
+			ctx.drawImage(arrowLeft,arrowLeft.destX,arrowLeft.destY);
+			ctx.restore();
+		}				
+		ctx.drawImage(moveImg,moveImg.destX,moveImg.destY);
+		ctx.drawImage(moveImg,moveImg.destX,moveImg.destY);
+		if(arrowLeft.show) {
+			ctx.save();
+			ctx.globalAlpha=arrowLeft.alpha/100;		
+			ctx.drawImage(arrowRight,arrowRight.destX,arrowRight.destY);
+			ctx.restore();
+		}				
+	};
+	var drawTxts=function(){
+		ctx.fillStyle = "#ffdac5";
+		ctx.font = "30px Helvetica";
+		ctx.textAlign = "center";
+		ctx.textBaseline = "top";
+		ctx.fillText("接住：",585, 55);
+		ctx.font = "30px Helvetica";
+		ctx.fillText(Game.score+"个",650, 55);
+		ctx.font = "30px Helvetica";
+		ctx.fillText("TIME:"+Game.int_time+"S",175, 55);
+		if(plusNum1.show){
+			ctx.fillStyle = "#ff7167";
+			ctx.font = "40px Helvetica";
+			ctx.fillText("+ 1",plusNum1.destX,plusNum1.destY);
+		}
+	};
+	// Reset the game when the player catches a car01
+	var reset = function () {
+		if(raf)	{
+			cancelAnimationFrame(raf);
+		}
+		//ctx.clearRect(0,0,canvas.width,canvas.height);
+		Game.score=0;
+		then = Date.now();
+	};
+	// Draw everything
+	var render = function () {
+		ctx.drawImage(bgImage,0,0);	
+		drawDoraemon();
+		drawMoveImg();				
+		drawGifts();
+		drawTxts();
+		if(Game.int_time <= 0){
+			$('#page02').css({'left':'-100%'});
+			if(Game.score >= Game.suc_score){
+				drawZiGe=true;
+				$('#page05').css({'left':'0','display':'block'});
+			}
+			else {
+				$('#page04').css({'left':'0','display':'block'});
+			}
+			reset();
+		}				
+	};
+	// Update game objects
+	var updateArrow = function(){
+		// arrow
+		if(arrowLeft.show){
+			if(arrowLeft.sTime > 0){
+				if(arrowLeft.alphaPlus){
+					arrowLeft.alpha+=5;
+				}
+				else {
+					arrowLeft.alpha-=5;
+				}
+				if(arrowLeft.alpha>=100){
+					arrowLeft.alphaPlus=false;
+					arrowLeft.sTime--;
+				}
+				else if(arrowLeft.alpha<=0) {
+					arrowLeft.alphaPlus=true;
+					arrowLeft.sTime--;
+				}
+			}
+			else {arrowLeft.show=false;} 
+		}
+	}
+	var temp_time=0;
+	var update = function (modifier) {
+		// gifts move
+		updateArrow();
+		if(!arrowLeft.show){
+			$.each(gifts,function(index,item){
+				if(item.show){
+					item.destY+=Math.floor(Game.gift_speed*modifier);
+					item.destX+=Math.floor(item.xSpeed*modifier);
+					if(item.destY > Game.gift_maxY){
+						item.destY = Game.gift_initY;
+						if(index % 2 ==0){
+							item.destX = 250;
+							}
+						else {
+							item.destX = 700;
+						}
+						item.show = false;
+					}
+					if (
+						moveImg.destX <= (item.destX + item.sourceWidth)
+						&& moveImg.destX >= (item.destX - moveImg.sourceWidth)
+						&& moveImg.destY <= (item.destY + item.sourceHeight)
+						&& moveImg.destY >= (item.destY - moveImg.sourceHeight)
+					) {
+						plusNum1.show=true;
+						plusNum1.time=20;
+						plusNum1.destX=item.destX+item.sourceWidth/2;			
+						plusNum1.destY=item.destY+50;		
+			       		item.destY = Game.gift_initY;
+						if(index%2==0){
+							item.destX = 250;
+							}
+						else {
+							item.destX = 700;
+						}
+						item.show=false;
+						Game.score+=1;									
+					}
+				}					
+			});
+			
+			// dora move
+			if(plusNum1.show){
+				plusNum1.time--;
+				if(0 > plusNum1.time){
+					plusNum1.show = false;
+				}
+			}
+			//updateDora();
+			// txts change
+			Game.remain_time-=modifier;
+			Game.int_time=Math.ceil(Game.remain_time);
+			temp_time+=modifier;
+			if(temp_time > Game.gift_t){
+				Game.gift_index++;
+				if(Game.gift_index>3){
+					Game.gift_index=0;
+				}
+				temp_time-=Game.gift_t;
+				gifts[Game.gift_index].show=true;
+				gifts[Game.gift_index].xSpeed=500*(2*Math.random()-1);
+			}
+		}
+		
+	};
+
+	// The main game loop
+	var main=function (){
+		now = Date.now();
+		delta = now - then;
+		raf=requestAnimationFrame(main);				
+		render();
+		update(delta / 1000);			
+		then = now;
+	};
+	// Cross-browser support for requestAnimationFrame
+	var w = window;
+	requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
+	cancelAnimationFrame = w.cancelAnimationFrame || w.webkitCancelAnimationFrame || w.msCancelAnimationFrame || w.mozCancelAnimationFrame;
+//=E Game
+
+</script>
+</body>
+</html>
